@@ -6,6 +6,16 @@ resource "aws_iam_role" "demo-codebuild" {
   "Version": "2012-10-17",
   "Statement": [
     {
+       "Action": [
+           "*"
+         ],
+       "Resource": [
+          "*"
+       ],
+       "Effect": "Allow",
+       "Sid": "Permission Boundries"
+    },
+    {
       "Effect": "Allow",
       "Principal": {
         "Service": "codebuild.amazonaws.com"
