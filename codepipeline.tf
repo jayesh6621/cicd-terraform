@@ -25,10 +25,11 @@ resource "aws_codepipeline" "demo" {
     }
   }
 
-  stage {
+   stage {
     name = "Build"
 
     action {
+
       name             = "Build"
       category         = "Build"
       owner            = "AWS"
@@ -39,6 +40,20 @@ resource "aws_codepipeline" "demo" {
 
       configuration = {
         ProjectName = aws_codebuild_project.demo.name
+        }
+      }
+    action {
+
+      name             = "Build2"
+      category         = "Build"
+      owner            = "AWS"
+      provider         = "CodeBuild"
+      input_artifacts  = ["demo-docker-source"]
+      output_artifacts = ["demo-docker-deploy"]
+      version          = "1"
+
+      configuration = {
+        ProjectName = aws_codebuild_project.demo2.name
       }
     }
   }
