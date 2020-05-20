@@ -33,5 +33,39 @@ resource "aws_codebuild_project" "demo" {
     type      = "CODEPIPELINE"
     buildspec = "buildspec.yml"
   }
-
 }
+
+
+resource "aws_codebuild_project" "demo2" {
+  name           = "Approval"
+  description    = "for manual approval"
+  build_timeout  = "10"
+  service_role   = aws_iam_role.demo-codebuild.arn
+
+
+  artifacts {
+    type = "CODEPIPELINE"
+  }
+
+  environment {
+    compute_type    = "BUILD_GENERAL1_SMALL"
+    image           = "aws/codebuild/docker:18.09.0"
+    type            = "LINUX_CONTAINER"
+    privileged_mode = true
+
+    environment_variable {
+      name  = "AWS_DEFAULT_REGION"
+      value = var.AWS_REGION
+    }
+    environment_variable {
+      name  = "AWS_ACCOUNT_ID"
+      value = data.aws_caller_identity.current.account_id
+    }
+  }
+
+  source {
+    type      = "CODEPIPELINE"
+    buildspec = "buildspec.yml"
+  }
+}
+
